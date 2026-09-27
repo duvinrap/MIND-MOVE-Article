@@ -1,0 +1,5 @@
+"use client";
+import {FormEvent,useState} from "react";
+import {useRouter} from "next/navigation";
+import {supabaseBrowser} from "@/lib/supabase";
+export default function Login(){const r=useRouter();const [email,setEmail]=useState('');const [password,setPassword]=useState('');const [error,setError]=useState('');async function submit(e:FormEvent){e.preventDefault();setError('');const {error}=await supabaseBrowser().auth.signInWithPassword({email,password});if(error){setError(error.message);return}r.push('/admin');r.refresh()}return <main><section className="submitPage"><p className="eyebrow">MIND MOVE ADMIN</p><h1>Sign in.</h1><form onSubmit={submit}><label>Email<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required/></label><label>Password<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required/></label>{error&&<p className="error">{error}</p>}<button className="btn dark" type="submit">Sign in →</button></form><p className="note">Admin access is controlled by Supabase Authentication and the admin_users table.</p></section></main>}
